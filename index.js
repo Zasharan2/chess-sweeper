@@ -32,7 +32,7 @@ const SCREENTYPE = {
     LOCAL: 2
 }
 
-var gameScreen = SCREENTYPE.TITLE_TO_LOCAL;
+var gameScreen = SCREENTYPE.NULL_TO_TITLE;
 
 class Vector2 {
     constructor(x, y) {
