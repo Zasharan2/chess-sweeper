@@ -8,6 +8,15 @@
         <h1>Chess Sweeper</h1>
         <canvas id = "gameCanvas", width = "512px", height = "512px"></canvas>
         <img id = "spritesheet", src = "images/spritesheet.png", width = "0px", height = "0px">
+        <p>Explanation:</p>
+        <p>The chessboard is overlayed with a minesweeper grid. When a piece moves away from a certain tile, it reveals its minesweeper number (blank if its a mine). As a result, black and white now have to hide their screens from one another so that the opponent may not see the player's minesweeper values.</p>
+        <p>The screen obfuscation is achieved through a bar at the bottom, indicating turn. By clicking initially on the bar (colored white), white begins their turn, where they can make their move. Once this is complete, white clicks the bar (colored red) once more to revert the screen to default, no minevalues shown. Then black clicks the bar (colored black) for their turn, and similarly ends it by clicking the bar (colored red) again.</p>
+        <p>There are three main ways to win. The first two, for ease of description, are stated in terms of how one may lose.</p>
+        <li>
+            <ul>Lose by Chess: A player loses by chess if their opponent manages to take their king. There is no system of check or checkmate.</ul>
+            <ul>Lose by Minesweeper + Chess: A player loses by minesweeper + chess if they move their king onto a tile which contains a mine.</ul>
+            <ul>Lose by Minesweeper: A player wins by minesweeper if they can flag every mine and move every chess piece off of a mine.</ul>
+        </li>
         <script src = "index.js"></script>
     </body>
 </html>
