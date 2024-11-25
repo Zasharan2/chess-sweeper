@@ -29,7 +29,9 @@ const SCREENTYPE = {
     NULL_TO_TITLE: 0.1,
     TITLE: 1,
     TITLE_TO_LOCAL: 1.2,
-    LOCAL: 2
+    LOCAL: 2,
+    LOCAL_TO_GAMEOVER: 2.3,
+    GAMEOVER: 3
 }
 
 var gameScreen = SCREENTYPE.NULL_TO_TITLE;
@@ -545,6 +547,7 @@ function movePiece(pieceIndex, x, y) {
         if (mineTiles[getMineTileIndexAt(x, y)].isBomb) {
             loseState = [mineShowState, LOSESTATE.BY_MINESWEEPER_CHESS];
             gameOver = true;
+            gameScreen = SCREENTYPE.LOCAL_TO_GAMEOVER;
             if (mineShowState == MINESHOWSTATE.WHITE) {
                 console.log("White loses by Minesweeper + Chess!");
             } else if (mineShowState == MINESHOWSTATE.BLACK) {
@@ -568,6 +571,7 @@ function movePiece(pieceIndex, x, y) {
             if (mineTiles[getMineTileIndexAt(x, y)].isBomb || mineTiles[getMineTileIndexAt(x - 1, y)].isBomb) {
                 loseState = [mineShowState, LOSESTATE.BY_MINESWEEPER_CHESS];
                 gameOver = true;
+                gameScreen = SCREENTYPE.LOCAL_TO_GAMEOVER;
                 if (mineShowState == MINESHOWSTATE.WHITE) {
                     console.log("White loses by Minesweeper + Chess!");
                 } else if (mineShowState == MINESHOWSTATE.BLACK) {
@@ -581,6 +585,7 @@ function movePiece(pieceIndex, x, y) {
             if (mineTiles[getMineTileIndexAt(x, y)].isBomb || mineTiles[getMineTileIndexAt(x + 1, y)].isBomb) {
                 loseState = [mineShowState, LOSESTATE.BY_MINESWEEPER_CHESS];
                 gameOver = true;
+                gameScreen = SCREENTYPE.LOCAL_TO_GAMEOVER;
                 if (mineShowState == MINESHOWSTATE.WHITE) {
                     console.log("White loses by Minesweeper + Chess!");
                 } else if (mineShowState == MINESHOWSTATE.BLACK) {
@@ -594,6 +599,7 @@ function movePiece(pieceIndex, x, y) {
             if (chessPieces[tempIndex].type == CHESSPIECETYPE.KING) {
                 loseState = [((mineShowState + 1) % 2), LOSESTATE.BY_CHESS];
                 gameOver = true;
+                gameScreen = SCREENTYPE.LOCAL_TO_GAMEOVER;
                 if (mineShowState == MINESHOWSTATE.WHITE) {
                     console.log("Black loses by Chess!");
                 } else if (mineShowState == MINESHOWSTATE.BLACK) {
@@ -687,6 +693,7 @@ function drawBoard() {
             if (checkFlags(mineShowState) && checkMinePieces()) {
                 loseState = [mineShowState, LOSESTATE.BY_MINESWEEPER];
                 gameOver = true;
+                gameScreen = SCREENTYPE.LOCAL_TO_GAMEOVER;
                 if (mineShowState == MINESHOWSTATE.WHITE) {
                     console.log("Black loses by Minesweeper!");
                 } else if (mineShowState == MINESHOWSTATE.BLACK) {
@@ -1091,6 +1098,43 @@ function main() {
             drawBoard();
             drawMines();
             drawSwitch();
+            break;
+        }
+        case SCREENTYPE.LOCAL_TO_GAMEOVER: {
+            console.log(loseState[0]);
+            gameScreen = SCREENTYPE.GAMEOVER;
+            break;
+        }
+        case SCREENTYPE.GAMEOVER: {
+            ctx.beginPath();
+            ctx.fillStyle = "#00aeee";
+            ctx.fillRect(0, 0, 512, 512);
+
+            ctx.beginPath();
+            ctx.fillStyle = "#ff0000";
+            ctx.font = "50px Comic Sans MS";
+            if (loseState[0] == 0) {
+                ctx.fillText("White Lost", 50, 80);
+            } else {
+                ctx.fillText("Black Lost", 50, 80);
+            }
+            ctx.beginPath();
+            ctx.fillStyle = "#ff0000";
+            ctx.font = "30px Comic Sans MS";
+            switch (loseState[1]) {
+                case LOSESTATE.BY_CHESS: {
+                    ctx.fillText("By Chess", 50, 130);
+                    break;
+                }
+                case LOSESTATE.BY_MINESWEEPER: {
+                    ctx.fillText("By Minesweeper", 50, 130);
+                    break;
+                }
+                case LOSESTATE.BY_MINESWEEPER_CHESS: {
+                    ctx.fillText("By Minesweeper + Chess", 50, 130);
+                    break;
+                }
+            }
             break;
         }
         default: {
